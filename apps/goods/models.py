@@ -16,7 +16,7 @@ class Goods(models.Model):
     sold_num = models.IntegerField(default=0, verbose_name="商品销售量")
     fav_num = models.IntegerField(default=0, verbose_name="收藏数")
     price = models.FloatField(default=0, verbose_name="价格")
-    gender = models.CharField(max_length=6, choices=(("male", "男的"), ("female", "女的"), ("neutral", "男女同款")),
+    gender = models.CharField(max_length=10, choices=(("male", "男的"), ("female", "女的"), ("neutral", "男女同款")),
                               default="female", verbose_name="性别")
     goods_desc = UEditorField(verbose_name="内容", width=800, height=300, default='')
     goods_front_image = models.ImageField(upload_to="goods/images/", null=True, blank=True, verbose_name="封面图")
@@ -38,7 +38,7 @@ class GoodCS(models.Model):
     商品色码
     """
     goods = models.ForeignKey(Goods, verbose_name="商品", related_name="cs")
-    goods_size = models.CharField(max_length=5, choices=(("35", "35"), ("36", "36"), ("37", "37"),
+    goods_size = models.CharField(max_length=10, choices=(("35", "35"), ("36", "36"), ("37", "37"),
                                                          ("38", "38"), ("39", "39"), ("40", "40"),
                                                          ("41", "41"), ("42", "42"), ("43", "43"),
                                                          ("44", "44"), ("45", "45"), ("S", "S"),
@@ -54,7 +54,7 @@ class GoodCS(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.goods.name
+        return str(self.goods.id)
 
 
 class GoodImage(models.Model):
@@ -86,4 +86,4 @@ class Banner(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.image
+        return str(self.image)
