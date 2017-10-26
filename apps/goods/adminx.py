@@ -14,7 +14,7 @@ class GoodsAdmin():
 
 class GoodCSAdmin():
     list_display = ["goods", "goods_size", "goods_color", "goods_num", "add_time"]
-    search_fields = ['goods', ]
+    search_fields = ['goods__name', ]
     list_filter = ["goods", "goods_size", "goods_color", "goods_num", "add_time"]
 
     class GoodImageInline():

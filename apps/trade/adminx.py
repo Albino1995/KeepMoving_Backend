@@ -8,6 +8,7 @@ class ShoppingCartAdmin():
 
 class OrderInfoAdmin():
     list_display = ["user", "order_sn", "trade_no", "pay_status", "order_mount", "pay_time", "add_time"]
+    search_fields = ['order_sn', ]
 
     class OrderGoodsInline():
         model = OrderGoods
