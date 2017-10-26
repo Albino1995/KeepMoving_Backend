@@ -10,5 +10,14 @@ KeepMoving商城，打算写成前后端分离使用RESTful API访问数据的�
 
 ## 项目地址
 
-KeepMoving
+KeepMoving<br>
 [KeepMoving-Backend](https://github.com/Albino1995/KeepMoving_Backend)
+
+## Installation
+
+pip install djangorestframework<br>
+pip install django<br>
+pip install django-filter<br>
+pip install markdown<br>
+pip install mysqlclient<br>
+pip install pillow<br>
