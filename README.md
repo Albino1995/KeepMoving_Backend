@@ -2,7 +2,6 @@
 
 KeepMoving商城，打算写成前后端分离使用RESTful API访问数据的形式，可能会断断续续写很久。
 
-<!--more-->
 
 ## 技术选型
 
@@ -21,3 +20,6 @@ pip install django-filter<br>
 pip install markdown<br>
 pip install mysqlclient<br>
 pip install pillow<br>
+xadmin依赖包:<br>
+pip install django-crispy-forms django-import-export django-reversion django-formtools future httplib2 six<br>
+pip install xlwt xlsxwriter<br>
