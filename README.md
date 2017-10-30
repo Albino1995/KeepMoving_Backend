@@ -2,6 +2,9 @@
 
 KeepMoving商城，打算写成前后端分离使用RESTful API访问数据的形式，可能会断断续续写很久。
 
+## 预览
+
+后台管理：![avatar](http://imglf5.nosdn.127.net/img/eVB1TkNydFhnVkd0U2IwNFpCTmxhMVRxUmRlZklFbHpRSkxuckpnbTdwdXYrZDJtdWdjbGtRPT0.jpg?imageView&thumbnail=1885y865&type=jpg&quality=96&stripmeta=0&type=jpg)
 
 ## 技术选型
 
