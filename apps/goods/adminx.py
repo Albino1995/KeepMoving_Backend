@@ -3,7 +3,7 @@ from .models import Goods, GoodCS, GoodImage, Banner
 
 
 class GoodsAdmin():
-    list_display = ['category', 'goods_sn', 'name', 'sold_num', 'fav_num', 'price', 'gender', 'goods_desc', 'is_new',
+    list_display = ['goods_sn', 'category', 'name', 'sold_num', 'fav_num', 'price', 'gender', 'goods_desc', 'is_new',
                     'is_hot', 'is_sale', 'add_time']
     search_fields = ['name', ]
     list_editable = ["is_hot", "is_new", "is_sale"]
