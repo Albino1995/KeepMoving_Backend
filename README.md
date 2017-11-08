@@ -5,7 +5,7 @@ KeepMoving商城，打算写成前后端分离使用RESTful API访问数据的�
 ## 预览
 
 后台管理：
-![](http://imglf5.nosdn.127.net/img/eVB1TkNydFhnVkd0U2IwNFpCTmxhMVRxUmRlZklFbHpRSkxuckpnbTdwdXYrZDJtdWdjbGtRPT0.jpg?imageView&thumbnail=1885y865&type=jpg&quality=96&stripmeta=0&type=jpg)
+![](https://raw.githubusercontent.com/Albino1995/Albino1995.github.io/master/img/20171108/backend.jpg)
 
 ## 技术选型
 
@@ -27,6 +27,6 @@ pip install pillow<br>
 xadmin依赖包:<br>
 pip install django-crispy-forms django-import-export django-reversion django-formtools future httplib2 six<br>
 pip install xlwt xlsxwriter<br>
-drf依赖
-pip install django-guardian
-pip install coreapi
+drf依赖<br>
+pip install django-guardian<br>
+pip install coreapi<br>
