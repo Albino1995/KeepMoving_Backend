@@ -23,3 +23,6 @@ pip install pillow<br>
 xadmin依赖包:<br>
 pip install django-crispy-forms django-import-export django-reversion django-formtools future httplib2 six<br>
 pip install xlwt xlsxwriter<br>
+drf依赖
+pip install django-guardian
+pip install coreapi
