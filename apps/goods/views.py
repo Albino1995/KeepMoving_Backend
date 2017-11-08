@@ -1,10 +1,9 @@
-from django.shortcuts import render
 from rest_framework import mixins, viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 
-from .models import Goods, GoodCS, GoodImage
-from .serializers import GoodsSerializer
+from .models import Goods, Banner
+from .serializers import GoodsSerializer, BannerSerializer
 from .filters import GoodsFilter
 
 # Create your views here.
@@ -35,3 +34,12 @@ class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
     search_fields = ('name',)
     # 排序
     ordering_fields = ('sold_num', 'price')
+
+
+class BannerViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    list:
+    获取轮播图列表
+    """
+    queryset = Banner.objects.all().order_by("index")
+    serializer_class = BannerSerializer

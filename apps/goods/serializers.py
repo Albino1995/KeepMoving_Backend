@@ -3,7 +3,7 @@ __author__ = 'Albino'
 
 from rest_framework import serializers
 
-from goods.models import Goods, GoodImage, GoodCS
+from goods.models import Goods, GoodImage, GoodCS, Banner
 
 
 class GoodsImageSerializer(serializers.ModelSerializer):
@@ -34,4 +34,12 @@ class GoodsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Goods
+        fields = "__all__"
+
+class BannerSerializer(serializers.ModelSerializer):
+    """
+    轮播图序列化
+    """
+    class Meta:
+        model = Banner
         fields = "__all__"

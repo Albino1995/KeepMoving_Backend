@@ -79,6 +79,7 @@ class Banner(models.Model):
     """
     image = models.ImageField(upload_to='banner', verbose_name="轮播图片")
     index = models.IntegerField(default=0, verbose_name="轮播顺序")
+    link = models.CharField(null=True, blank=True, verbose_name="链接", max_length=200)
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     class Meta:
