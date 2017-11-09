@@ -23,7 +23,7 @@ class GoodsCSSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GoodCS
-        fields = ("goods_size", "goods_color", "goods_num", "img")
+        fields = ("id", "goods_size", "goods_color", "goods_num", "img")
 
 
 class GoodsSerializer(serializers.ModelSerializer):
