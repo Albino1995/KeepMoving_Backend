@@ -54,7 +54,7 @@ class GoodCS(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return str(self.goods.id)
+        return str(self.goods.name) + ' ' + str(self.goods_size) + ' ' + self.goods_color
 
 
 class GoodImage(models.Model):

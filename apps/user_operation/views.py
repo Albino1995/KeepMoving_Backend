@@ -4,12 +4,13 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from utils.permissons import IsOwnerOrReadOnly
-from .serializers import UserFavDetailSerializer, UserFavSerializer, LeavingMessageSerializer
-from .models import UserFav, UserLeavingMessage
+from .serializers import UserFavDetailSerializer, UserFavSerializer, LeavingMessageSerializer, AddressSerializer
+from .models import UserFav, UserLeavingMessage, UserAddress
 # Create your views here.
 
-class UserFavViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
-                     viewsets.GenericViewSet):
+
+class UserFavViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                     mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """
     create:
     新建收藏
@@ -35,7 +36,8 @@ class UserFavViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
         return UserFav.objects.filter(user=self.request.user)
 
 
-class LeavingMessageViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+class LeavingMessageViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin,
+                            viewsets.GenericViewSet):
     """
     list:
     获取用户留言
@@ -48,5 +50,27 @@ class LeavingMessageViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, m
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     # 重载GenericAPIView中的get_queryset获取当前用户的留言
     serializer_class = LeavingMessageSerializer
+
     def get_queryset(self):
         return UserLeavingMessage.objects.filter(user=self.request.user)
+
+
+class AddressViewSet(viewsets.ModelViewSet):
+    """
+    list:
+    获取收货地址
+    create:
+    新增收货地址
+    delete:
+    删除收货地址
+    update:
+    更新收货地址
+    partial_update:
+    部分更新收货地址
+    """
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = AddressSerializer
+
+    def get_queryset(self):
+        return UserAddress.objects.filter(user=self.request.user)

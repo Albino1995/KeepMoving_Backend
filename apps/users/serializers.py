@@ -57,7 +57,7 @@ class UserRegSerializer(serializers.ModelSerializer):
         style={'input_type': 'password'}, help_text="密码", label="密码", write_only=True,
     )
 
-    def validated_code(self, code):
+    def validate_code(self, code):
         verify_code = VerifyCode.objects.filter(mobile=self.initial_data["mobile"]).order_by("-add_time")
         if verify_code:
             last_record = verify_code[0]
