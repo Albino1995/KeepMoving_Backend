@@ -1,45 +1,36 @@
 #!/usr/bin/env python
 __author__ = 'Albino'
 
+import re
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from datetime import datetime
+from datetime import timedelta
 
-from goods.models import Goods, GoodImage, GoodCS, Banner
+from KeepMoving_Backend.settings import REGEX_MOBILE
+from .models import VerifyCode
+
+User = get_user_model()
 
 
-class GoodsImageSerializer(serializers.ModelSerializer):
+class SmsSerializers(serializers.Serializer):
     """
-    商品轮播图序列化
+    短信验证码序列化
     """
-    class Meta:
-        model = GoodImage
-        fields = ("image",)
+    mobile = serializers.CharField(max_length=11)
+    def validate_mobile(self, mobile):
+        """
+        验证手机号
+        :return:
+        """
+        if User.objects.filter(mobile=mobile).count():
+            raise serializers.ValidationError("用户已存在")
 
+        if not re.match(REGEX_MOBILE, mobile):
+            raise serializers.ValidationError("手机号码不合法")
 
-class GoodsCSSerializer(serializers.ModelSerializer):
-    """
-    商品色码序列化
-    """
-    img = GoodsImageSerializer(many=True)
+        one_minute_ago = datetime.now() - timedelta(hours=0, minutes=1, seconds=0)
+        if VerifyCode.objects.filter(add_time__gt=one_minute_ago, mobile=mobile).count():
+            raise serializers.ValidationError("距上次发送未超过60s")
 
-    class Meta:
-        model = GoodCS
-        fields = ("goods_size", "goods_color", "goods_num", "img")
-
-
-class GoodsSerializer(serializers.ModelSerializer):
-    """
-    商品序列化
-    """
-    cs = GoodsCSSerializer(many=True)
-
-    class Meta:
-        model = Goods
-        fields = "__all__"
-
-class BannerSerializer(serializers.ModelSerializer):
-    """
-    轮播图序列化
-    """
-    class Meta:
-        model = Banner
-        fields = "__all__"
+        return mobile
