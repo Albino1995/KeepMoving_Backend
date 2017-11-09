@@ -24,9 +24,8 @@ pip install django-filter<br>
 pip install markdown<br>
 pip install mysqlclient<br>
 pip install pillow<br>
-xadmin依赖包:<br>
 pip install django-crispy-forms django-import-export django-reversion django-formtools future httplib2 six<br>
 pip install xlwt xlsxwriter<br>
-drf依赖<br>
 pip install django-guardian<br>
 pip install coreapi<br>
+pip install django-cors-headers<br>
