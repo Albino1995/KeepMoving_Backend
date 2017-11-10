@@ -23,6 +23,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 from goods.views import GoodsListViewSet, BannerViewSet
 from users.views import SmsCodeViewSet, UserViewSet
 from user_operation.views import UserFavViewSet, LeavingMessageViewSet, AddressViewSet
+from trade.views import ShoppingCartViewSet
 from KeepMoving_Backend.settings import MEDIA_ROOT
 
 router = DefaultRouter()
@@ -41,6 +42,8 @@ router.register(r'userfavs', UserFavViewSet, base_name="userfavs")
 router.register(r'messages', LeavingMessageViewSet, base_name="messages")
 # 配置message的url,用于留言
 router.register(r'address', AddressViewSet, base_name="address")
+# 配置shopping的url,用于购物车
+router.register(r'shoppingcarts', ShoppingCartViewSet, base_name="shoppingcarts")
 
 urlpatterns = [
     # xadmin
