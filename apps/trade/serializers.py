@@ -129,7 +129,9 @@ class OrderSerializer(serializers.ModelSerializer):
     alipay_url = serializers.SerializerMethodField(read_only=True)
 
     def generate_order_sn(self):
-        # 生成订单号 当前时间 + userid + 随机数
+        """
+        生成订单号 当前时间 + userid + 随机数
+        """
         order_sn = "{time_str}{user_id}{ran_str}".format(time_str=time.strftime("%Y%m%d%H%M%S"),
                                                          user_id=self.context["request"].user.id,
                                                          ran_str="".join(
