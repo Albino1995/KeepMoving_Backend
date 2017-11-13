@@ -84,8 +84,12 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     订单详情序列化
     """
     goods = OrderGoodsSerializer(many=True)
+    alipay_url = serializers.SerializerMethodField(read_only=True)
 
     def get_alipay_url(self, obj):
+        """
+        生成支付宝连接
+        """
         alipay = AliPay(
             appid="2016080900200120",
             app_notify_url="http://127.0.0.1:8000/alipay/return/",
@@ -148,6 +152,9 @@ class OrderSerializer(serializers.ModelSerializer):
         return signer_mobile
 
     def get_alipay_url(self, obj):
+        """
+        生成支付宝连接
+        """
         alipay = AliPay(
             appid="2016080900200120",
             app_notify_url="http://127.0.0.1:8000/alipay/return/",
