@@ -4,6 +4,8 @@ KeepMoving商城，打算写成前后端分离使用RESTful API访问数据的�
 
 ## 预览
 
+api接口：
+![](https://raw.githubusercontent.com/Albino1995/Albino1995.github.io/master/img/20171108/api.jpg)
 后台管理：
 ![](https://raw.githubusercontent.com/Albino1995/Albino1995.github.io/master/img/20171108/backend.jpg)
 
