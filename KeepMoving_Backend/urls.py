@@ -23,7 +23,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 from goods.views import GoodsListViewSet, BannerViewSet
 from users.views import SmsCodeViewSet, UserViewSet
 from user_operation.views import UserFavViewSet, LeavingMessageViewSet, AddressViewSet
-from trade.views import ShoppingCartViewSet, OrderViewSet
+from trade.views import ShoppingCartViewSet, OrderViewSet, AlipayView
 from KeepMoving_Backend.settings import MEDIA_ROOT
 
 router = DefaultRouter()
@@ -57,4 +57,6 @@ urlpatterns = [
     url(r'docs/', include_docs_urls(title="KeepMoving")),
     # jwt的认证接口
     url(r'^login/$', obtain_jwt_token),
+
+    url(r'^alipay/return/', AlipayView.as_view(), name="alipay"),
 ]

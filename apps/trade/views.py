@@ -1,11 +1,19 @@
+from datetime import datetime
+from django.shortcuts import redirect
 from rest_framework import mixins, viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+from utils.alipay import AliPay
 
 from utils.permissons import IsOwnerOrReadOnly
 from .serializers import ShoppingCartSerializer, ShoppingCartDetailSerializer, OrderDetailSerializer, OrderSerializer
 from .models import ShoppingCart, OrderInfo, OrderGoods
+from goods.models import GoodCS
+from KeepMoving_Backend.settings import private_key_path, ali_pub_key_path
 
 # Create your views here.
 
@@ -83,3 +91,92 @@ class OrderViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retrie
             # 删除购物车记录
             shopping_cart.delete()
         return order
+
+
+class AlipayView(APIView):
+    def get(self, request):
+        """
+        处理支付宝的return_url返回
+        """
+        processed_dict = {}
+        for key, value in request.GET.items():
+            processed_dict[key] = value
+        sign = processed_dict.pop("sign", None)
+        alipay = AliPay(
+            appid="2016080900200120",
+            app_notify_url="http://127.0.0.1:8000/alipay/return/",
+            app_private_key_path=private_key_path,
+            alipay_public_key_path=ali_pub_key_path,  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            debug=True,  # 默认False,
+            return_url="http://127.0.0.1:8000/alipay/return/"
+        )
+
+        verify_re = alipay.verify(processed_dict, sign)
+
+        if verify_re is True:
+            # 订单号
+            order_sn = processed_dict.get('out_trade_no', None)
+            # 支付宝交易号
+            trade_no = processed_dict.get('trade_no', None)
+
+            existed_orders = OrderInfo.objects.filter(order_sn=order_sn)
+            for existed_order in existed_orders:
+                order_goods = existed_order.goods.all()
+                for order_good in order_goods:
+                    goods = order_good.goods.goods
+                    goods.sold_num += order_good.goods_num
+                    goods_cs = order_good.goods
+                    goods_cs.goods_num -= order_good.goods_num
+                    goods_cs.save()
+                    goods.save()
+                existed_order.pay_status = "TRADE_SUCCESS"
+                existed_order.trade_no = trade_no
+                existed_order.pay_time = datetime.now()
+                existed_order.save()
+
+            response = redirect("http://127.0.0.1:8000/")
+            return response
+        else:
+            response = redirect("http://127.0.0.1:8000/")
+            return response
+
+    def post(self, request):
+        """
+        处理支付宝的notify_url返回
+        """
+        processed_dict = {}
+        for key, value in request.POST.items():
+            processed_dict[key] = value
+        sign = processed_dict.pop("sign", None)
+        alipay = AliPay(
+            appid="2016080900200120",
+            app_notify_url="http://127.0.0.1:8000/alipay/return/",
+            app_private_key_path=private_key_path,
+            alipay_public_key_path=ali_pub_key_path,  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            debug=True,  # 默认False,
+            return_url="http://127.0.0.1:8000/alipay/return/"
+        )
+
+        verify_re = alipay.verify(processed_dict, sign)
+
+        if verify_re is True:
+            # 订单号
+            order_sn = processed_dict.get('out_trade_no', None)
+            # 支付宝交易号
+            trade_no = processed_dict.get('trade_no', None)
+            # 支付宝订单状态
+            trade_status = processed_dict.get('trade_status', None)
+
+            existed_orders = OrderInfo.objects.filter(order_sn=order_sn)
+            for existed_order in existed_orders:
+                order_goods = existed_order.goods.all()
+                for order_good in order_goods:
+                    goods = order_good.goods.goods
+                    goods.sold_num += order_good.goods_num
+                    goods.save()
+                existed_order.pay_status = trade_status
+                existed_order.trade_no = trade_no
+                existed_order.pay_time = datetime.now()
+                existed_order.save()
+
+            return Response("success")
