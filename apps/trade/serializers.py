@@ -1,16 +1,21 @@
 #!/usr/bin/env python
 __author__ = 'Albino'
 
+import time
+import random
+import string
+import re
 from rest_framework import serializers
 
-from .models import ShoppingCart
+from KeepMoving_Backend.settings import REGEX_MOBILE
+from .models import ShoppingCart, OrderInfo, OrderGoods
 from goods.models import GoodCS
 from goods.serializers import GoodsCSSerializer
 
 
 class ShoppingCartDetailSerializer(serializers.ModelSerializer):
     """
-    购物车记录序列化
+    购物车记录序列化，一个购物车只有一条单个的商品记录
     """
     goods = GoodsCSSerializer(many=False)
 
@@ -60,3 +65,71 @@ class ShoppingCartSerializer(serializers.Serializer):
             raise serializers.ValidationError({"nums": ["商品数量不能大于库存"]})
         instance.save()
         return instance
+
+
+class OrderGoodsSerializer(serializers.ModelSerializer):
+    """
+    一条商品订单记录序列化
+    """
+    goods = GoodsCSSerializer(many=False)
+
+    class Meta:
+        model = OrderGoods
+        fields = "__all__"
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+    """
+    订单详情序列化
+    """
+    goods = OrderGoodsSerializer(many=True)
+
+    class Meta:
+        model = OrderInfo
+        fields = "__all__"
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    """
+    订单序列化
+    """
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    order_sn = serializers.CharField(read_only=True)
+    trade_no = serializers.CharField(read_only=True)
+    pay_status = serializers.CharField(read_only=True)
+    pay_time = serializers.DateTimeField(read_only=True)
+    order_mount = serializers.FloatField(read_only=True)
+    add_time = serializers.DateTimeField(read_only=True)
+
+    # alipay_url = serializers.SerializerMethodField(read_only=True)
+
+    def generate_order_sn(self):
+        # 生成订单号 当前时间 + userid + 随机数
+        order_sn = "{time_str}{user_id}{ran_str}".format(time_str=time.strftime("%Y%m%d%H%M%S"),
+                                                         user_id=self.context["request"].user.id,
+                                                         ran_str="".join(
+                                                             random.choice(string.digits) for x in range(2)))
+        return order_sn
+
+    def validate(self, attrs):
+        shopping_carts = ShoppingCart.objects.filter(user=self.context['request'].user)
+        total_price = 0
+        for shopping_cart in shopping_carts:
+            total_price += shopping_cart.goods.goods.price * shopping_cart.nums
+        attrs["order_mount"] = total_price
+        attrs["order_sn"] = self.generate_order_sn()
+        return attrs
+
+    def validate_signer_mobile(self, signer_mobile):
+        if not re.match(REGEX_MOBILE, signer_mobile):
+            raise serializers.ValidationError("手机号码不合法")
+
+        return signer_mobile
+
+    class Meta:
+        model = OrderInfo
+        fields = ("user", "order_sn", "trade_no", "pay_status", "order_mount", "pay_time", "address", "signer_name",
+                  "signer_mobile", "add_time")

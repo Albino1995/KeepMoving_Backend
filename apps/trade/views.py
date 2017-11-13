@@ -4,11 +4,10 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from utils.permissons import IsOwnerOrReadOnly
-from .serializers import ShoppingCartSerializer, ShoppingCartDetailSerializer
-from .models import ShoppingCart
+from .serializers import ShoppingCartSerializer, ShoppingCartDetailSerializer, OrderDetailSerializer, OrderSerializer
+from .models import ShoppingCart, OrderInfo, OrderGoods
 
 # Create your views here.
-
 
 
 class ShoppingCartViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
@@ -45,3 +44,42 @@ class ShoppingCartViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins
             return ShoppingCartDetailSerializer
         else:
             return ShoppingCartSerializer
+
+
+class OrderViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
+                   viewsets.GenericViewSet):
+    """
+    list:
+    显示个人全部订单
+    create:
+    创建订单
+    delete:
+    取消订单
+    read:
+    单条订单详细记录
+    """
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+
+    def get_queryset(self):
+        return OrderInfo.objects.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return OrderDetailSerializer
+        else:
+            return OrderSerializer
+
+    def perform_create(self, serializer):
+        order = serializer.save()
+        shopping_carts = ShoppingCart.objects.filter(user=self.request.user)
+
+        for shopping_cart in shopping_carts:
+            order_goods = OrderGoods()
+            order_goods.goods = shopping_cart.goods
+            order_goods.goods_num = shopping_cart.nums
+            order_goods.order = order
+            order_goods.save()
+            # 删除购物车记录
+            shopping_cart.delete()
+        return order
