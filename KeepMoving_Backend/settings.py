@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'rest_framework.authtoken',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -81,6 +82,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # social_django
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -136,6 +140,9 @@ USE_TZ = False
 # 测试认证
 AUTHENTICATION_BACKENDS = (
     'users.views.CustomBackend',
+    # 第三方登录
+    'social_core.backends.weibo.WeiboOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 
@@ -147,13 +154,16 @@ STATIC_URL = '/static/'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# 设置限速
 REST_FRAMEWORK = {
-    # 用户认证
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
     ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '100/day'
+    }
 }
 
 import datetime
@@ -172,3 +182,13 @@ API_KEY = "bb12da24f3962864c82a5849ef2d125b"
 # 支付宝相关配置
 private_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/private_2048.txt')
 ali_pub_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/alipay_key_2048.txt')
+
+# 缓存过期时间
+REST_FRAMEWORK_EXTENSIONS = {
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 15
+}
+
+SOCIAL_AUTH_WEIBO_KEY = '4042231095'
+SOCIAL_AUTH_WEIBO_SECRET = 'b9e4e3a76fee457429c132f86a781d65'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'

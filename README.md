@@ -31,3 +31,5 @@ pip install coreapi<br>
 pip install django-cors-headers<br>
 pip install djangorestframework-jwt<br>
 pip install pycryptodome<br>
+pip install drf-extensions<br>
+pip install social-auth-app-django

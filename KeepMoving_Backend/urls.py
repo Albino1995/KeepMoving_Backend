@@ -57,6 +57,8 @@ urlpatterns = [
     url(r'docs/', include_docs_urls(title="KeepMoving")),
     # jwt的认证接口
     url(r'^login/$', obtain_jwt_token),
-
+    # 支付宝返回接口
     url(r'^alipay/return/', AlipayView.as_view(), name="alipay"),
+    # 第三方登录url
+    url('', include('social_django.urls', namespace='social'))
 ]
