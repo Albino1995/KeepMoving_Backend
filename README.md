@@ -30,3 +30,4 @@ pip install django-guardian<br>
 pip install coreapi<br>
 pip install django-cors-headers<br>
 pip install djangorestframework-jwt<br>
+pip install pycryptodome<br>
