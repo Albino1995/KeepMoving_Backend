@@ -21,11 +21,12 @@ class ShoppingCartDetailSerializer(serializers.ModelSerializer):
 
 class ShoppingCartSerializer(serializers.Serializer):
     """
-    购物车序列化
+    购物车序列化，使用Serializer防止添加相同商品到购物车报错
     """
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
+    # 外键字段，使用Serializer带上queryset
     goods = serializers.PrimaryKeyRelatedField(required=True, label='商品名称', queryset=GoodCS.objects.all())
     nums = serializers.IntegerField(required=True, label='数量', min_value=1,
                                     error_messages={
@@ -38,7 +39,7 @@ class ShoppingCartSerializer(serializers.Serializer):
         nums = validated_data["nums"]
         goods = validated_data["goods"]
         if nums > goods.goods_num:
-            raise serializers.ValidationError("商品数量不能大于库存")
+            raise serializers.ValidationError({"nums": ["商品数量不能大于库存"]})
         existed = ShoppingCart.objects.filter(user=user, goods=goods)
         # 针对从商品页增加购物车数量
         if existed:
@@ -56,6 +57,6 @@ class ShoppingCartSerializer(serializers.Serializer):
         """
         instance.nums = validated_data["nums"]
         if instance.nums > instance.goods.goods_num:
-            raise serializers.ValidationError("商品数量不能大于库存")
+            raise serializers.ValidationError({"nums": ["商品数量不能大于库存"]})
         instance.save()
         return instance
