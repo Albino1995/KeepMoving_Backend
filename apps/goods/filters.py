@@ -12,7 +12,7 @@ class GoodsFilter(django_filters.rest_framework.FilterSet):
     """
     price_min = django_filters.NumberFilter(name='price', lookup_expr='gte', help_text='最低价')
     price_max = django_filters.NumberFilter(name='price', lookup_expr='lte', help_text='最高价')
-    gender = django_filters.ChoiceFilter(name='gender', choices=(("male", "男的"), ("female", "女的"), ("neutral", "男女同款")),
+    gender = django_filters.MultipleChoiceFilter(name='gender', choices=(("male", "男的"), ("female", "女的"), ("neutral", "男女同款")),
                                          help_text='性别')
     category = django_filters.ChoiceFilter(name='category', choices=(("踩的", "踩的"), ("穿的", "穿的"), ("戴的", "戴的")),
                                            help_text='类别')
