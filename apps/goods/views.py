@@ -34,7 +34,7 @@ class GoodsListViewSet(CacheResponseMixin, mixins.ListModelMixin, mixins.Retriev
     # 分页
     pagination_class = GoodsPagination
     # 搜索
-    search_fields = ('name',)
+    search_fields = ('name', 'goods_sn')
     # 排序
     ordering_fields = ('sold_num', 'price')
 
