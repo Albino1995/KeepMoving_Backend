@@ -5,13 +5,13 @@ import re
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from goods.serializers import GoodsCSSerializer
+from goods.serializers import GoodsSerializer
 from .models import UserFav, UserLeavingMessage, UserAddress
 from KeepMoving_Backend.settings import REGEX_MOBILE
 
 
 class UserFavDetailSerializer(serializers.ModelSerializer):
-    goods = GoodsCSSerializer()
+    goods = GoodsSerializer()
 
     class Meta:
         model = UserFav
