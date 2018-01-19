@@ -23,7 +23,9 @@ class GoodsCSSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GoodCS
-        fields = ("id", "goods_size", "goods_color", "goods_num", "img")
+        fields = ("id", "goods_size", "goods_color", "goods_num", "img", "goods")
+        # 指示遍历的关系的深度
+        depth = 1
 
 
 class GoodsSerializer(serializers.ModelSerializer):
