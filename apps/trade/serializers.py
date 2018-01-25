@@ -176,5 +176,5 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderInfo
-        fields = ("user", "order_sn", "trade_no", "pay_status", "order_mount", "pay_time", "address", "signer_name",
+        fields = ("id", "user", "order_sn", "trade_no", "pay_status", "order_mount", "pay_time", "address", "signer_name",
                   "signer_mobile", "add_time", "alipay_url")
