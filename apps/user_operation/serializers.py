@@ -17,6 +17,7 @@ class UserFavDetailSerializer(serializers.ModelSerializer):
         model = UserFav
         fields = ("goods", "id")
 
+
 class UserFavSerializer(serializers.ModelSerializer):
     # 获取当前user
     user = serializers.HiddenField(
@@ -48,6 +49,12 @@ class LeavingMessageSerializer(serializers.ModelSerializer):
 
 
 class AddressSerializer(serializers.ModelSerializer):
+    province = serializers.CharField(required=True)
+    city = serializers.CharField(required=True)
+    district = serializers.CharField(required=True)
+    address = serializers.CharField(required=True)
+    signer_name = serializers.CharField(required=True)
+    signer_mobile = serializers.CharField(required=True)
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
