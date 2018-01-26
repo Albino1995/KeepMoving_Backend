@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.shortcuts import redirect
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, viewsets, filters
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -68,6 +68,8 @@ class OrderViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retrie
     """
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('add_time',)
 
     def get_queryset(self):
         return OrderInfo.objects.filter(user=self.request.user)
