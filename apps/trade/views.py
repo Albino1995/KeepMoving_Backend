@@ -136,10 +136,10 @@ class AlipayView(APIView):
                 existed_order.pay_time = datetime.now()
                 existed_order.save()
 
-            response = redirect("http://127.0.0.1:8000/")
+            response = redirect("http://127.0.0.1:8000/index#/success")
             return response
         else:
-            response = redirect("http://127.0.0.1:8000/")
+            response = redirect("http://127.0.0.1:8000/index#/success")
             return response
 
     def post(self, request):
