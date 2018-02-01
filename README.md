@@ -1,6 +1,6 @@
 # KeepMoving_Backend
 
-KeepMoving商城，打算写成前后端分离使用RESTful API访问数据的形式，可能会断断续续写很久。
+KeepMoving商城，前后端分离，数据访问使用RESTful API
 
 ## 预览
 
@@ -15,8 +15,8 @@ api接口：
 
 ## 项目地址
 
-[KeepMoving](https://github.com/Albino1995/KeepMoving)<br>
-[KeepMoving-Backend](https://github.com/Albino1995/KeepMoving_Backend)
+前端：[KeepMoving](https://github.com/Albino1995/KeepMoving)<br>
+后端：[KeepMoving-Backend](https://github.com/Albino1995/KeepMoving_Backend)
 
 ## Installation
 
