@@ -130,11 +130,11 @@ if __name__ == "__main__":
 
     alipay = AliPay(
         appid="2016080900200120",
-        app_notify_url="http://127.0.0.1:8000/alipay/return/",
+        app_notify_url="http://111.230.186.193:8000/alipay/return/",
         app_private_key_path="../trade/keys/private_2048.txt",
         alipay_public_key_path="../trade/keys/alipay_key_2048.txt",  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
         debug=True,  # 默认False,
-        return_url="http://127.0.0.1:8000/alipay/return/"
+        return_url="http://111.230.186.193:8000/alipay/return/"
     )
 
     for key, value in query.items():
@@ -145,7 +145,7 @@ if __name__ == "__main__":
         subject="测试订单",
         out_trade_no="".join(random.choice(string.digits) for x in range(8)),
         total_amount=100,
-        return_url="http://127.0.0.1:8000/alipay/return/"
+        return_url="http://111.230.186.193:8000/alipay/return/"
     )
     re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
 

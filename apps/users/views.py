@@ -1,5 +1,6 @@
 import string
 import random
+from django.shortcuts import render_to_response
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
@@ -124,3 +125,10 @@ class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.Upd
         return serializer.save()
 
 
+def page_not_fount(request):
+    """
+    404处理函数
+    """
+    response = render_to_response('404.html', {})
+    response.status_code = 404
+    return response

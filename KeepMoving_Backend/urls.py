@@ -25,7 +25,7 @@ from goods.views import GoodsListViewSet, BannerViewSet
 from users.views import SmsCodeViewSet, UserViewSet
 from user_operation.views import UserFavViewSet, LeavingMessageViewSet, AddressViewSet
 from trade.views import ShoppingCartViewSet, OrderViewSet, AlipayView
-from KeepMoving_Backend.settings import MEDIA_ROOT
+from KeepMoving_Backend.settings import MEDIA_ROOT, STATIC_ROOT
 
 router = DefaultRouter()
 
@@ -62,5 +62,9 @@ urlpatterns = [
     # 支付宝返回接口
     url(r'^alipay/return/', AlipayView.as_view(), name="alipay"),
     # 第三方登录url
-    url('', include('social_django.urls', namespace='social'))
+    url('', include('social_django.urls', namespace='social')),
+
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT})
 ]
+
+handler500 = 'users.views.page_not_found'
